@@ -1,0 +1,27 @@
+# IDE files
+.project
+.settings/
+*.launch
+*.cproject
+
+# Generated build files
+Debug/
+Release/
+*.dep
+*.map
+*.markers
+*.o
+*.d
+*.elf
+*.hex
+*.bin
+
+# CubeMX generated files
+*/Core/Inc/*_hal.h
+*/Core/Src/*_hal.c
+*/Core/Inc/*_hal_conf.h
+*/Core/Src/*_hal_conf.c
+*/Core/Inc/stm32*_it.h
+*/Core/Src/stm32*_it.c
+/SW4STM32/
+
