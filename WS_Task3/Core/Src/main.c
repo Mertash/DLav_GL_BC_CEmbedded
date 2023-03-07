@@ -69,11 +69,11 @@ static void MX_TIM4_Init(void);
 /* USER CODE BEGIN 0 */
 
 
-uint16_t PWM_PERIOD = 40000;
-uint16_t PWM_PERIOD_5kHZ_STEP = 3250;
-uint16_t PWM_PERIOD_MAX = 65000;
-uint16_t PWM_PERIOD_MIDDLE = 32500;
-uint16_t PWM_PERIOD_MIN = 0;
+volatile uint16_t PWM_PERIOD = 40000;
+volatile uint16_t PWM_PERIOD_5kHZ_STEP = 3250;
+volatile uint16_t PWM_PERIOD_MAX = 65000;
+volatile uint16_t PWM_PERIOD_MIDDLE = 32500;
+volatile uint16_t PWM_PERIOD_MIN = 0;
 
 uint16_t PWM_DUTY_CURENT_CH_ALL = 20000;
 uint16_t PWM_DUTY_MAX;
@@ -125,6 +125,8 @@ int main(void)
   while (1)
   {
 	  	//////////init variables//////////
+
+	  	TIM4->ARR = PWM_PERIOD;
 	  	PWM_DUTY_MAX = PWM_PERIOD;
 	  	PWM_DUTY_5PCT_STEP = PWM_PERIOD/20;
 	  	PWM_DUTY_MIDDLE = PWM_PERIOD/2;
@@ -132,26 +134,25 @@ int main(void)
 	  	////////////////////////
 
 			  if(CURRENT_SCHEME == 0){
+
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_2);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_3);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_4);
-				  }
+			  }
 			  if (CURRENT_SCHEME == 1){
 
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_2);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_3);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_4);
-
 				  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
 				  TIM4->CCR1=PWM_DUTY_CURENT_CH_ALL;
 			  }
 			  if(CURRENT_SCHEME == 2){
-				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
 
+				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_3);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_4);
-
 				  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
 				  TIM4->CCR2=PWM_DUTY_CURENT_CH_ALL;
 			  }
@@ -159,25 +160,22 @@ int main(void)
 
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_2);
-
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_4);
-
 				  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
 				  TIM4->CCR3=PWM_DUTY_CURENT_CH_ALL;
 			  }
 			  if(CURRENT_SCHEME == 4){
+
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_1);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_2);
 				  HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_3);
-
-
 				  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
 				  TIM4->CCR4=PWM_DUTY_CURENT_CH_ALL;
 			  }
 
 
 
-			if((HAL_GetTick()- LAST_TICK) >=100)
+			if((HAL_GetTick()- LAST_TICK) >=500)
 			{	LAST_TICK = HAL_GetTick();
 
 				if(HAL_GPIO_ReadPin(GPIOC, DUTY_UP_BUTTON_PIN) == 0) {
@@ -204,7 +202,7 @@ int main(void)
 				else if(HAL_GPIO_ReadPin(GPIOA, CH_CANGE_BUTTON_PIN) == 0) {
 						CURRENT_SCHEME = (CURRENT_SCHEME + 1) % 5;
 
-					if(CURRENT_SCHEME == 5){CURRENT_SCHEME = 0; }
+						if(CURRENT_SCHEME == 5){CURRENT_SCHEME = 0;}
 				}
 
 			}
@@ -282,7 +280,7 @@ static void MX_TIM4_Init(void)
   htim4.Instance = TIM4;
   htim4.Init.Prescaler = 1000;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = PWM_PERIOD;
+  htim4.Init.Period = 40000;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
