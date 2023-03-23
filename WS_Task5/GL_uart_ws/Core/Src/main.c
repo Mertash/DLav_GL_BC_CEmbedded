@@ -61,7 +61,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 	uint16_t USART3_Data_transmit[80] = {0};
-	uint8_t USART3_Data_receive[4] = {0};
+	uint8_t USART3_Data_receive[1] = {0};
 
 	uint32_t TimerClock = 0;
 
@@ -127,56 +127,128 @@ int main(void)
 	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_11) == 0 && HAL_GetTick()-TimerButDebon > 300){
 		  TimerButDebon = HAL_GetTick();
 
-		  switch(LED_Blue_state){
-		  		case 0:
-		  			LED_Blue_state = 1;
-		  			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, SET);
-		  			HAL_UART_Transmit_IT(&huart3, "Blue ON\r\n", sizeof("Blue ON\r\n"));
-		  			break;
-		  		case 1:
-		  			LED_Blue_state = 0;
-		  			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, RESET);
-		  			HAL_UART_Transmit_IT(&huart3, "Blue Off\r\n", sizeof("Blue Off\r\n"));
-		  			break;
-		  		}
+			switch(LED_Blue_state){
+			case 0:
+				LED_Blue_state = 1;
+				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, SET);
+				HAL_UART_Transmit_IT(&huart3, "Blue ON\r\n", sizeof("Blue ON\r\n"));
+				break;
+			case 1:
+				LED_Blue_state = 0;
+				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, RESET);
+				HAL_UART_Transmit_IT(&huart3, "Blue Off\r\n", sizeof("Blue Off\r\n"));
+				break;
+			}
 
 
 
 	  	  }
-	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_8) == 1 && HAL_GetTick()-TimerButDebon > 300){
+	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_8) == 0 && HAL_GetTick()-TimerButDebon > 300){
 		  TimerButDebon = HAL_GetTick();
 
-		switch(LED_Green_state){
-		case 0:
-			LED_Green_state = 1;
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, SET);
-			HAL_UART_Transmit_IT(&huart3, "Green ON\r\n", sizeof("Green ON\r\n"));
-			break;
-		case 1:
-			LED_Green_state = 0;
-			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, RESET);
-			HAL_UART_Transmit_IT(&huart3, "Green Off\r\n", sizeof("Green Off\r\n"));
-			break;
-		}
+			switch(LED_Green_state){
+			case 0:
+				LED_Green_state = 1;
+				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, SET);
+				HAL_UART_Transmit_IT(&huart3, "Green ON\r\n", sizeof("Green ON\r\n"));
+				break;
+			case 1:
+				LED_Green_state = 0;
+				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, RESET);
+				HAL_UART_Transmit_IT(&huart3, "Green Off\r\n", sizeof("Green Off\r\n"));
+				break;
+			}
 	  }
 
+
+	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_9) == 0 && HAL_GetTick()-TimerButDebon > 300){
+	  		  TimerButDebon = HAL_GetTick();
+
+	  			switch(LED_Orange_state){
+	  			case 0:
+	  				LED_Orange_state = 1;
+	  				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, SET);
+	  				HAL_UART_Transmit_IT(&huart3, "Orange ON\r\n", sizeof("Orange ON\r\n"));
+	  				break;
+	  			case 1:
+	  				LED_Orange_state = 0;
+	  				HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, RESET);
+	  				HAL_UART_Transmit_IT(&huart3, "Orange Off\r\n", sizeof("Orange Off\r\n"));
+	  				break;
+	  			}
+	  	  }
+
+	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_6) == 0 && HAL_GetTick()-TimerButDebon > 300){
+				  TimerButDebon = HAL_GetTick();
+
+					switch(LED_Red_state){
+					case 0:
+						LED_Red_state = 1;
+						HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, SET);
+						HAL_UART_Transmit_IT(&huart3, "Red ON\r\n", sizeof("Red ON\r\n"));
+						break;
+					case 1:
+						LED_Red_state = 0;
+						HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, RESET);
+						HAL_UART_Transmit_IT(&huart3, "Red Off\r\n", sizeof("Red Off\r\n"));
+						break;
+					}
+			  }
 //////////////////////WORK USART///////////////////
-	result =  HAL_UART_Receive(&huart3, USART3_Data_receive, 4,10);
+	result =  HAL_UART_Receive(&huart3, USART3_Data_receive, 2,10);
 
 	if (result == HAL_OK){
-		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, SET);
-		if(USART3_Data_receive == "G_On"){
+
+		////Green/////
+		if(USART3_Data_receive[0] == 'G' && USART3_Data_receive[1] == '1'){
+			LED_Green_state = 1;
+			HAL_UART_Transmit_IT(&huart3, "Green ON\r\n", sizeof("Green ON\r\n"));
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, SET);
+		}
+
+		if(USART3_Data_receive[0] == 'G' && USART3_Data_receive[1] == '0'){
+			LED_Green_state = 0;
+			HAL_UART_Transmit_IT(&huart3, "Green Off\r\n", sizeof("Green Off\r\n"));
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, RESET);
+
+		}
+		////Orange/////
+		if(USART3_Data_receive[0] == 'O' && USART3_Data_receive[1] == '1'){
+			LED_Orange_state = 1;
+			HAL_UART_Transmit_IT(&huart3, "Orange ON\r\n", sizeof("Orange ON\r\n"));
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, SET);
+		}
+		if(USART3_Data_receive[0] == 'O' && USART3_Data_receive[1] == '0'){
+			LED_Orange_state = 0;
+			HAL_UART_Transmit_IT(&huart3, "Orange Off\r\n", sizeof("Orange Off\r\n"));
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, RESET);
+		}
+		////Red/////
+		if(USART3_Data_receive[0] == 'R' && USART3_Data_receive[1] == '1'){
+			LED_Red_state = 1;
+			HAL_UART_Transmit_IT(&huart3, "Red ON\r\n", sizeof("Red ON\r\n"));
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, SET);
-		}
-		if(USART3_Data_receive == "G_Off"){
-					HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, RESET);
-		}
+				}
+		if(USART3_Data_receive[0] == 'R' && USART3_Data_receive[1] == '0'){
+			LED_Red_state = 0;
+			HAL_UART_Transmit_IT(&huart3, "Red Off\r\n", sizeof("Red Off\r\n"));
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, RESET);
+			}
+		////Blue/////
+		if(USART3_Data_receive[0] == 'B' && USART3_Data_receive[1] == '1'){
+			LED_Blue_state = 1;
+			HAL_UART_Transmit_IT(&huart3, "Blue ON\r\n", sizeof("Blue ON\r\n"));
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, SET);
+			}
+		if(USART3_Data_receive[0] == 'B' && USART3_Data_receive[1] == '0'){
+			LED_Blue_state = 0;
+			HAL_UART_Transmit_IT(&huart3, "Blue Off\r\n", sizeof("Blue Off\r\n"));
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, RESET);
+			}
+
+
 	}
-	  /*if(HAL_GetTick()-TimerClock > 100){
-	  	  TimerClock = HAL_GetTick();
-	  	HAL_UART_Receive_IT(&huart3, USART3_Data_receive, 2);
-  	  }
-*/
+
 
 
     /* USER CODE END WHILE */
