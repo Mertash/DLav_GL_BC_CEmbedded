@@ -1,0 +1,16 @@
+!SESSION 2023-03-05 18:30:18.921 -----------------------------------------------
+eclipse.buildId=Version 1.7.0
+java.version=11.0.10
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=ru_RU
+Framework arguments:  /media/dmytro-nook/9506-5B61/GL_C_Embedded_Practice_Task/GL_WorkShop4/ADC_Temp/.project
+Command-line arguments:  -os linux -ws gtk -arch x86_64 /media/dmytro-nook/9506-5B61/GL_C_Embedded_Practice_Task/GL_WorkShop4/ADC_Temp/.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-03-05 18:30:35.639
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-03-05 18:30:36.022
+!MESSAGE Log4j initialized with config file /media/dmytro-nook/9506-5B61/GL_C_Embedded_Practice_Task/GL_WorkShop4/ADC_Temp/.metadata/.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-03-05 18:30:39.287
+!MESSAGE Started RMI Server, listening on port 41337
